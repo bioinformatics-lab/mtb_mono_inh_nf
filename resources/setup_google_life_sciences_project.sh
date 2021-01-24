@@ -5,13 +5,15 @@
 # Setup gcloud CLI
 
 
-export PROJECT=bahia-analysis
+export PROJECT=mtb-mono-inh-nf
 
 gcloud projects create $PROJECT --name=$PROJECT
 
-gcloud config set project bahia-analysis
+gcloud config set project mtb-mono-inh-nf
 
-export BUCKET=bahia-analysis-bucket
+# Link the project to a billing account before proceeding OR create the project from the website portal.
+
+export BUCKET=mtb-mono-inh-nf-bucket
 
 gsutil mb gs://$BUCKET
 
