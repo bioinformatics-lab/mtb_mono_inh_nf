@@ -9,7 +9,7 @@ process FASTQC {
     publishDir params.resultsDir, mode: params.saveMode, enabled: params.shouldPublish
     container 'quay.io/biocontainers/fastqc:0.11.9--0'
     cpus 4
-    memory "8 GB"
+    memory "7 GB"
 
     input:
     tuple val(genomeName), path(genomeReads)

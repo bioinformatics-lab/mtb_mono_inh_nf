@@ -14,8 +14,8 @@ process MTBSEQ {
     tag "${genomeFileName}"
     publishDir params.resultsDir, mode: params.saveMode, enabled: params.shouldPublish
     container 'quay.io/biocontainers/mtbseq:1.0.3--pl526_1'
-    cpus 16
-    memory "32 GB"
+    cpus 8
+    memory "15 GB"
 
     input:
     tuple val(genomeFileName), path("${genomeFileName}_somelib_R?.fastq.gz")
@@ -52,24 +52,3 @@ process MTBSEQ {
 
 }
 
-
-
-
-workflow test {
-
-include { TRIMMOMATIC } from "../trimmomatic/trimmomatic.nf"
-
-input_ch = Channel.fromFilePairs("$launchDir/test_data/*_{1,2}.fastq.gz")
-
-TRIMMOMATIC(input_ch)
-
-gatk_jar_ch = Channel.fromPath("$launchDir/test_data/*bz2")
-usr_env_ch = Channel.value("root")
-
-MTBSEQ(TRIMMOMATIC.out,
-	gatk_jar_ch,
-	usr_env_ch)
-
-
-
-}
