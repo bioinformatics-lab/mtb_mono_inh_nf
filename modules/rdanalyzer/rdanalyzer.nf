@@ -6,7 +6,7 @@ params.resultsDir = "${params.outdir}/rd_analyzer"
 params.shouldPublish = true
 
 
-process RD_ANALYZER {
+process RDANALYZER {
     tag "${genomeFileName}"
     container 'quay.io/bioinformatics_playground/rd_analyzer:0.0.1'
     publishDir params.resultsDir, mode: params.saveMode, enabled: params.shouldPublish

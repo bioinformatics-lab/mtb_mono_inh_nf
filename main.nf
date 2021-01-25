@@ -29,7 +29,7 @@ workflow {
 //            gatk38_jar_ch,
 //            env_user_ch)
 
-    RD_ANALYZER(TRIMMOMATIC.out)
+    RDANALYZER(TRIMMOMATIC.out)
     SPOTYPING(TRIMMOMATIC.out)
     SPADES(TRIMMOMATIC.out)
     PROKKA(SPADES.out)
