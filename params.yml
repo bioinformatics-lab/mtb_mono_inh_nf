@@ -1,5 +1,8 @@
-outdir: FIXME
+outdir:
+        ./results
 
-gatk38_jar: FIXME
+gatk38_jar:
+        ./resources/GenomeAnalysisTK.jar
 
-reads: FIXME
+reads:
+        ./data/full_data/*_{R1,R2}*fastq.gz
