@@ -1,50 +1,23 @@
-#!/usr/bin/env nextflow
-
-/*
-#==============================================
-code documentation
-#==============================================
-*/
-
-
-/*
-#==============================================
-params
-#==============================================
-*/
-
 params.resultsDir = 'results/tbProfiler'
 params.saveMode = 'copy'
-params.collate = false
-params.filePattern = "./*_{R1,R2}.fastq.gz"
 
-/*
-#==============================================
-tb-profiler
-#==============================================
-*/
-
-Channel.fromFilePairs(params.filePattern)
-        .set {  ch_in_tbProfiler }
+params.saveMode = 'copy'
+params.resultsDir = "${params.outdir}/tbprofiler"
+params.shouldPublish = true
 
 
-process tbProfiler {
-    /*
-     The downstream process `tb-profiler collate` expects all individual results to be in
-     a folder called results
-     */
-    publishDir """${params.resultsDir}/results""", mode: params.saveMode
+process TBPROFILER_PROFILE {
+    publishDir "$params.resultsDir/profile", mode: params.saveMode, enabled: params.shouldPublish
     container 'quay.io/biocontainers/tb-profiler:2.8.6--pypy_0'
-
-    when:
-    !params.collate
+    cpus 4
+    memory "7 GB"
 
     input:
-    tuple genomeName, file(genomeReads) from ch_in_tbProfiler
+    tuple val(genomeName), file(genomeReads)
 
     output:
     tuple path("""${genomeName}.results.txt"""),
-                 path("""${genomeName}.results.json""") into ch_out_tbProfiler
+                 path("""${genomeName}.results.json""")
 
 
     script:
@@ -57,28 +30,21 @@ process tbProfiler {
 }
 
 
-Channel.fromPath("""${params.resultsDir}/results""")
-        .set { ch_in_tbProfiler_collate }
-
-process tbProfiler_collate {
-    publishDir './', mode: params.saveMode
+process TBPROFILER_COLLATE {
+    publishDir "$params.resultsDir/profile", mode: params.saveMode, enabled: params.shouldPublish
     container 'quay.io/biocontainers/tb-profiler:2.8.6--pypy_0'
-
-    echo true
-
-    when:
-    params.collate
-
+    cpus 4
+    memory "7 GB"
     input:
-    path("""${params.resultsDir}/results""") from ch_in_tbProfiler_collate
+    path("""${params.resultsDir}/results""")
 
     output:
-    tuple file("""${params.resultsDir}/tbprofiler.dr.indiv.itol.txt"""),
-            file("""${params.resultsDir}/tbprofiler.dr.itol.txt"""),
-            file("""${params.resultsDir}/tbprofiler.json"""),
-            file("""${params.resultsDir}/tbprofiler.lineage.itol.txt"""),
-            file("""${params.resultsDir}/tbprofiler.txt"""),
-            file("""${params.resultsDir}/tbprofiler.variants.txt""") into ch_out_tbProfiler_collate
+    tuple path("""${params.resultsDir}/tbprofiler.dr.indiv.itol.txt"""),
+            path("""${params.resultsDir}/tbprofiler.dr.itol.txt"""),
+            path("""${params.resultsDir}/tbprofiler.json"""),
+            path("""${params.resultsDir}/tbprofiler.lineage.itol.txt"""),
+            path("""${params.resultsDir}/tbprofiler.txt"""),
+            path("""${params.resultsDir}/tbprofiler.variants.txt""")
 
 
     script:
@@ -91,9 +57,3 @@ process tbProfiler_collate {
 
 }
 
-
-/*
-#==============================================
-# extra
-#==============================================
-*/
