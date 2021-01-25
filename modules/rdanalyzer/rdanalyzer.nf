@@ -11,7 +11,7 @@ process RDANALYZER {
     container 'quay.io/bioinformatics_playground/rd_analyzer:0.0.1'
     publishDir params.resultsDir, mode: params.saveMode, enabled: params.shouldPublish
     cpus 8
-    memory "16 GB"
+    memory "15 GB"
 
 
     input:

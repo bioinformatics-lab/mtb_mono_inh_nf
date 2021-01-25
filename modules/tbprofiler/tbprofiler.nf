@@ -9,8 +9,8 @@ params.shouldPublish = true
 process TBPROFILER_PROFILE {
     publishDir "$params.resultsDir/profile", mode: params.saveMode, enabled: params.shouldPublish
     container 'quay.io/biocontainers/tb-profiler:2.8.6--pypy_0'
-    cpus 4
-    memory "7 GB"
+    cpus 8
+    memory "15 GB"
 
     input:
     tuple val(genomeName), file(genomeReads)

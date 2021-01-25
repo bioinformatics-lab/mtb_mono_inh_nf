@@ -11,7 +11,7 @@ process TRIMMOMATIC {
     publishDir params.resultsDir, mode: params.saveMode, enabled: params.shouldPublish
     container 'quay.io/biocontainers/trimmomatic:0.35--6'
     cpus 8
-    memory "16 GB"
+    memory "15 GB"
 
     input:
     tuple val(genomeName), path(genomeReads)
