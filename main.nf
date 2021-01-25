@@ -1,6 +1,7 @@
 nextflow.enable.dsl = 2
 
-//include { FASTQC } from "./modules/fastqc/fastqc.nf"
+//include { FASTQC as FASTQC_UNTRIMMED } from "./modules/fastqc/fastqc.nf" addParams(resultsDir: "${params.outdir}/fastqc_untrimmed")
+//include { FASTQC as FASTQC_TRIMMED } from "./modules/fastqc/fastqc.nf" addParams(resultsDir: "${params.outdir}/fastqc_trimmed")
 include { MTBSEQ } from "./modules/mtbseq/mtbseq.nf"
 //include { MULTIQC } from "./modules/multiqc/multiqc.nf"
 //include { PROKKA } from "./modules/prokka/prokka.nf"
@@ -22,5 +23,13 @@ workflow mtbseq {
             gatk38_jar_ch,
             env_user_ch)
 
+}
+
+
+
+workflow test {
+    reads_ch = Channel.fromFilePairs(params.reads)
+
+    reads_ch.view()
 }
 

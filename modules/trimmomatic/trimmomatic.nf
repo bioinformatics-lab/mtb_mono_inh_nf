@@ -10,8 +10,8 @@ process TRIMMOMATIC {
     tag "${genomeName}"
     publishDir params.resultsDir, mode: params.saveMode, enabled: params.shouldPublish
     container 'quay.io/biocontainers/trimmomatic:0.35--6'
-    cpus 4
-    memory "8 GB"
+    cpus 8
+    memory "16 GB"
 
     input:
     tuple val(genomeName), path(genomeReads)
@@ -41,12 +41,3 @@ process TRIMMOMATIC {
     """
 }
 
-workflow test {
-
-
-input_ch = Channel.fromFilePairs("$launchDir/test_data/*_{1,2}.fastq.gz")
-
-
-TRIMMOMATIC(input_ch)
-
-}
