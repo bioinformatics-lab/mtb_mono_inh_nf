@@ -15,24 +15,26 @@ include { TRIMMOMATIC } from "./modules/trimmomatic/trimmomatic.nf"
 
 
 
-workflow {
+workflow { 
     reads_ch = Channel.fromFilePairs(params.reads)
     gatk38_jar_ch = Channel.value(params.gatk38_jar)
     env_user_ch = Channel.value("root")
 
 
-    FASTQC_UNTRIMMED(reads_ch)
+//    FASTQC_UNTRIMMED(reads_ch) // DONE 
 
     TRIMMOMATIC(reads_ch)
-    FASTQC_TRIMMED(TRIMMOMATIC.out)
+
+//    FASTQC_TRIMMED(TRIMMOMATIC.out) // DONE
+
 //    MTBSEQ(TRIMMOMATIC.out,
 //            gatk38_jar_ch,
-//            env_user_ch)
+//            env_user_ch) // PARTIAL
 
-    RDANALYZER(TRIMMOMATIC.out)
-    SPOTYPING(TRIMMOMATIC.out)
-    SPADES(TRIMMOMATIC.out)
-    PROKKA(SPADES.out)
+//    RDANALYZER(TRIMMOMATIC.out) // DONE
+    SPOTYPING(TRIMMOMATIC.out) 
+//    SPADES(TRIMMOMATIC.out) // DONE
+//    PROKKA(SPADES.out) // DONE
 
 //    TBPROFILER_PROFILE(TRIMMOMATIC.out)
 //    TBPROFILER_COLLATE(TBPROFILER_PROFILE.out)
