@@ -8,8 +8,8 @@ Channel.fromFilePairs(inputFilePattern)
 
 
 process process {
-#    publishDir 'results/PROCESS'
-#    container 'PROCESS_CONTAINER'
+    publishDir 'results/PROCESS'
+    container 'PROCESS_CONTAINER'
 
 
     input:
@@ -20,9 +20,9 @@ process process {
 
 
     script:
-    #FIXME
+    // FIXME
     genomeName= genomeFileName.toString().split("\\_")[0]
-    
+
     """
     CLI PROCESS
     """

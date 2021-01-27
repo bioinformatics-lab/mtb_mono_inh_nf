@@ -10,21 +10,21 @@ process TRIMMOMATIC {
     tag "${genomeName}"
     publishDir params.resultsDir, mode: params.saveMode, enabled: params.shouldPublish
     container 'quay.io/biocontainers/trimmomatic:0.35--6'
-    cpus 8
-    memory "15 GB"
 
     input:
     tuple val(genomeName), path(genomeReads)
 
     output:
-    tuple val(genomeName), path("*_{R1,R2}.p.fastq.gz")
+    tuple val(genomeFileName), path("*_{R1,R2}.p.fastq.gz")
 
     script:
 
-    fq_1_paired = genomeName + '_R1.p.fastq.gz'
-    fq_1_unpaired = genomeName + '_R1.s.fastq.gz'
-    fq_2_paired = genomeName + '_R2.p.fastq.gz'
-    fq_2_unpaired = genomeName + '_R2.s.fastq.gz'
+    genomeFileName = genomeName.toString().split("\\_")[0]
+
+    fq_1_paired = genomeFileName + '_R1.p.fastq.gz'
+    fq_1_unpaired = genomeFileName + '_R1.s.fastq.gz'
+    fq_2_paired = genomeFileName + '_R2.p.fastq.gz'
+    fq_2_unpaired = genomeFileName + '_R2.s.fastq.gz'
 
     """
     trimmomatic \
@@ -39,5 +39,26 @@ process TRIMMOMATIC {
     $fq_2_unpaired \
     LEADING:3 TRAILING:3 SLIDINGWINDOW:4:20 MINLEN:36
     """
+
+    stub:
+    genomeFileName = genomeName.toString().split("\\_")[0]
+
+    fq_1_paired = genomeFileName + '_R1.p.fastq.gz'
+    fq_1_unpaired = genomeFileName + '_R1.s.fastq.gz'
+    fq_2_paired = genomeFileName + '_R2.p.fastq.gz'
+    fq_2_unpaired = genomeFileName + '_R2.s.fastq.gz'
+
+
+    """
+    touch $fq_1_paired
+    touch $fq_1_unpaired
+    touch $fq_2_paired
+    touch $fq_2_unpaired
+    """
+
 }
 
+workflow test {
+    input_reads_ch = Channel.fromFilePairs("$launchDir/data/mock_data/*_{R1,R2}*fastq.gz")
+    TRIMMOMATIC(input_reads_ch)
+}

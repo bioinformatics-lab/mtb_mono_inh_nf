@@ -6,3 +6,10 @@ gatk38_jar:
 
 reads:
         ./data/full_data/*_{R1,R2}*fastq.gz
+
+mtbseq_library_name:
+        somelib
+
+mtbseq_project_name:
+        MonoINH
+
