@@ -8,8 +8,6 @@ process FASTQC {
     tag "${genomeName}"
     publishDir params.resultsDir, mode: params.saveMode, enabled: params.shouldPublish
     container 'quay.io/biocontainers/fastqc:0.11.9--0'
-    cpus 8
-    memory "15 GB"
 
     input:
     tuple val(genomeName), path(genomeReads)
@@ -24,6 +22,11 @@ process FASTQC {
     fastqc *fastq*
     """
 
+    stub:
+    """
+    touch ${genomeName}.html
+    touch ${genomeName}.zip
+    """
 }
 
 

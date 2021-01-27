@@ -18,11 +18,16 @@ process SPOTYPING {
     tuple file('*.txt'), file('SITVIT*.xls')
 
     script:
-    genomeName = genomeFileName.toString().split("\\_")[0]
     genomeReadToBeAnalyzed = params.R2 ? genomeReads[1] : genomeReads[0]
 
     """
-    python /SpoTyping-v2.0/SpoTyping-v2.0-commandLine/SpoTyping.py ./${genomeReadToBeAnalyzed} -o ${genomeName}.txt
+    python /SpoTyping-v2.0/SpoTyping-v2.0-commandLine/SpoTyping.py ./${genomeReadToBeAnalyzed} -o ${genomeFileName}.txt
+    """
+
+    stub:
+    """
+    touch ${genomeFileName}.txt
+    touch SITVIT_${genomeFileName}.xls
     """
 
 }

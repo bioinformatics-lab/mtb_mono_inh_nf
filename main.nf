@@ -8,48 +8,21 @@ include { PROKKA } from "./modules/prokka/prokka.nf"
 include { RDANALYZER } from "./modules/rdanalyzer/rdanalyzer.nf"
 include { SPADES } from "./modules/spades/spades.nf"
 include { SPOTYPING } from "./modules/spotyping/spotyping.nf"
-//include { QUAST } from "./modules/quast/quast.nf"
-//include { TBPROFILER_PROFILE; TBPROFILER_COLLATE } from "./modules/tbprofiler/tbprofiler.nf"
+include { QUAST } from "./modules/quast/quast.nf"
+include { TBPROFILER_PROFILE; TBPROFILER_COLLATE } from "./modules/tbprofiler/tbprofiler.nf"
 include { TRIMMOMATIC } from "./modules/trimmomatic/trimmomatic.nf"
 
 
 
-
-workflow { 
+workflow {
     reads_ch = Channel.fromFilePairs(params.reads)
-    gatk38_jar_ch = Channel.value(params.gatk38_jar)
+    gatk38_jar_ch = Channel.value(java.nio.file.Paths.get("$params.gatk38_jar"))
     env_user_ch = Channel.value("root")
 
-
-//    FASTQC_UNTRIMMED(reads_ch) // DONE 
-
+    FASTQC_UNTRIMMED(reads_ch)
     TRIMMOMATIC(reads_ch)
+    FASTQC_TRIMMED(TRIMMOMATIC.out)
 
-//    FASTQC_TRIMMED(TRIMMOMATIC.out) // DONE
-
-//    MTBSEQ(TRIMMOMATIC.out,
-//            gatk38_jar_ch,
-//            env_user_ch) // PARTIAL
-
-//    RDANALYZER(TRIMMOMATIC.out) // DONE
-    SPOTYPING(TRIMMOMATIC.out) 
-//    SPADES(TRIMMOMATIC.out) // DONE
-//    PROKKA(SPADES.out) // DONE
-
-//    TBPROFILER_PROFILE(TRIMMOMATIC.out)
-//    TBPROFILER_COLLATE(TBPROFILER_PROFILE.out)
-
-
-}
-
-
-
-workflow mtbseq {
-    reads_ch = Channel.fromFilePairs(params.reads)
-    gatk38_jar_ch = Channel.value("$params.gatk38_jar")
-    env_user_ch = Channel.value("root")
-
-    TRIMMOMATIC(reads_ch)
     MTBSEQ_PER_SAMPLE(TRIMMOMATIC.out,
             gatk38_jar_ch,
             env_user_ch)
@@ -69,8 +42,20 @@ workflow mtbseq {
     )
 
 
-}
+    RDANALYZER(TRIMMOMATIC.out)
+    SPOTYPING(TRIMMOMATIC.out)
+    SPADES(TRIMMOMATIC.out)
+    PROKKA(SPADES.out.prokka_input)
+    QUAST(SPADES.out.quast_input.collect())
 
+    TBPROFILER_PROFILE(TRIMMOMATIC.out)
+
+    TBPROFILER_COLLATE(
+            TBPROFILER_PROFILE.out.collect()
+    )
+
+
+}
 
 
 workflow test {

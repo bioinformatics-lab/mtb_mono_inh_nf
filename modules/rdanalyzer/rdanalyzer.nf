@@ -2,7 +2,7 @@
 nextflow.enable.dsl= 2
 
 params.saveMode = 'copy'
-params.resultsDir = "${params.outdir}/rd_analyzer"
+params.resultsDir = "${params.outdir}/rdanalyzer"
 params.shouldPublish = true
 
 
@@ -10,8 +10,6 @@ process RDANALYZER {
     tag "${genomeFileName}"
     container 'quay.io/bioinformatics_playground/rd_analyzer:0.0.1'
     publishDir params.resultsDir, mode: params.saveMode, enabled: params.shouldPublish
-    cpus 8
-    memory "15 GB"
 
 
     input:
@@ -22,11 +20,17 @@ process RDANALYZER {
 
 
     script:
-    genomeName = genomeFileName.toString().split("\\_")[0]
 
     """
-    python  /RD-Analyzer/RD-Analyzer.py  -o ${genomeName} ${genomeReads[0]} ${genomeReads[1]}
+    python  /RD-Analyzer/RD-Analyzer.py  -o ${genomeFileName} ${genomeReads[0]} ${genomeReads[1]}
     """
+
+    stub:
+    """
+    touch ${genomeFileName}.result
+    touch ${genomeFileName}.depth
+    """
+
 }
 
 

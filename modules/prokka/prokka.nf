@@ -8,8 +8,6 @@ process PROKKA {
     tag "${genomeName}"
     publishDir params.resultsDir, mode: params.saveMode, enabled: params.shouldPublish
     container 'quay.io/biocontainers/prokka:1.14.6--pl526_0'
-    cpus 8
-    memory "15 GB"
 
     input:
     tuple val(genomeName),  path(bestContig)
@@ -21,6 +19,11 @@ process PROKKA {
 
     """
     prokka --outdir ${genomeName} --prefix $genomeName ${bestContig} --cpus ${task.cpus}
+    """
+
+    stub:
+    """
+    mkdir ${genomeName}
     """
 
 }

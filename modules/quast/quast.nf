@@ -1,44 +1,61 @@
-
-ch_refFILE = Channel.value("$baseDir/refFILE")
-
-inputFilePattern = "./*_{R1,R2}.fastq.gz"
-Channel.fromFilePairs(inputFilePattern)
-        .into {  ch_in_PROCESS }
+nextflow.enable.dsl=2
 
 
+params.saveMode = 'copy'
+params.resultsDir = "${params.outdir}/quast"
+params.shouldPublish = true
 
-process process {
-    publishDir 'results/PROCESS'
-    container 'PROCESS_CONTAINER'
+
+process QUAST {
+    publishDir params.resultsDir, mode: params.saveMode, enabled: params.shouldPublish
+    container 'quay.io/biocontainers/quast:5.0.2--py37pl526hb5aa323_2'
 
 
     input:
-    set genomeFileName, file(genomeReads) from ch_in_PROCESS
+    path(scaffoldFiles)
 
     output:
-    path("""${PROCESS_OUTPUT}""") into ch_out_PROCESS
+    path("*icarus*")
+    path("*basic_stats*")
+    path("*report*")
 
 
     script:
-    // FIXME
-    genomeName= genomeFileName.toString().split("\\_")[0]
 
     """
-    CLI PROCESS
+    quast ${scaffoldFiles}
+    """
+
+    stub:
+    """
+    echo "quast ${scaffoldFiles}"
+
+    mkdir basic_stats/
+    mkdir icarus_viewers/
+    
+    touch icarus.html
+    touch report.html
+    touch report.pdf
+    touch report.tex
+    touch report.tsv
+    touch report.txt
+    touch transposed_report.tex
+    touch transposed_report.tsv
+    touch transposed_report.txt 
     """
 }
 
+workflow test {
+    include { TRIMMOMATIC } from "../trimmomatic/trimmomatic.nf"
+    include { SPADES } from "../spades/spades.nf"
 
+    input_reads_ch = Channel.fromFilePairs("$launchDir/data/mock_data/*_{R1,R2}*fastq.gz")
 
-/*
-#==============================================
-# TODO quast
-# quay.io/biocontainers/quast:5.0.2--1
-#==============================================
-*/
+    TRIMMOMATIC(input_reads_ch)
 
-/*
-   cp ../spades_results/work/ae/4d2677d866d9030d613d882de8b639/210_spades/scaffolds.fasta 210_scaffolds.fasta
-   cp ../spades_results/work/b0/a4240ada1affe5b4217da78f21bc8f/23_spades/scaffolds.fasta 23_scaffolds.fasta
-quast.py 23_scaffolds.fasta 210_scaffolds.fasta
-*/
+    SPADES(TRIMMOMATIC.out)
+
+    QUAST(SPADES.out.collect())
+
+}
+
