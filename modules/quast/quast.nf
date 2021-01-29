@@ -15,9 +15,7 @@ process QUAST {
     path(scaffoldFiles)
 
     output:
-    path("*icarus*")
-    path("*basic_stats*")
-    path("*report*")
+    path("quast_results")
 
 
     script:
