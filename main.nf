@@ -23,32 +23,32 @@ workflow {
     TRIMMOMATIC(reads_ch) // DONE
 //    FASTQC_TRIMMED(TRIMMOMATIC.out)
 
-//    MTBSEQ_PER_SAMPLE(TRIMMOMATIC.out,
-//            gatk38_jar_ch,
-//            env_user_ch) // TODO
+    MTBSEQ_PER_SAMPLE(TRIMMOMATIC.out,
+            gatk38_jar_ch,
+            env_user_ch) // TODO
 
 
-//    samples_tsv_file_ch = MTBSEQ_PER_SAMPLE.out[1]
-//            .collect()
-//            .flatten().map { n ->  "$n" + "\t" + "$params.mtbseq_library_name" + "\n"  }
-//            .collectFile(name: 'samples.tsv', newLine: false, storeDir: "$params.resultsDir_mtbseq_cohort")
+    samples_tsv_file_ch = MTBSEQ_PER_SAMPLE.out[1]
+            .collect()
+            .flatten().map { n ->  "$n" + "\t" + "$params.mtbseq_library_name" + "\n"  }
+            .collectFile(name: 'samples.tsv', newLine: false, storeDir: "$params.resultsDir_mtbseq_cohort")
 
-//    MTBSEQ_COHORT(
-//            samples_tsv_file_ch,
-//            MTBSEQ_PER_SAMPLE.out[2].collect(),
-//            MTBSEQ_PER_SAMPLE.out[3].collect(),
-//            gatk38_jar_ch,
-//            env_user_ch,
-//    ) // TODO
+    MTBSEQ_COHORT(
+            samples_tsv_file_ch,
+            MTBSEQ_PER_SAMPLE.out[2].collect(),
+            MTBSEQ_PER_SAMPLE.out[3].collect(),
+            gatk38_jar_ch,
+            env_user_ch,
+    ) // TODO
 
 
 //    RDANALYZER(TRIMMOMATIC.out) // DONE
 //    SPOTYPING(TRIMMOMATIC.out) // DONE
 //    SPADES(TRIMMOMATIC.out) // DONE
 //    PROKKA(SPADES.out.prokka_input) // DONE
-//     QUAST(SPADES.out.quast_input.collect()) // TODO
+//    QUAST(SPADES.out.quast_input.collect()) // TODO
 
-//   TBPROFILER_PROFILE(TRIMMOMATIC.out) // DONE
+//    TBPROFILER_PROFILE(TRIMMOMATIC.out) // DONE
 
 //    TBPROFILER_COLLATE(
 //            TBPROFILER_PROFILE.out.collect()
