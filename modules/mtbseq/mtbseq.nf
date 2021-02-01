@@ -12,6 +12,7 @@ process MTBSEQ_PER_SAMPLE {
     tag "${genomeFileName}"
     publishDir params.resultsDir_mtbseq_per_sample, pattern: "${genomeFileName}", mode: params.saveMode_mtbseq_per_sample, enabled: params.shouldPublish_mtbseq_per_sample
     container 'quay.io/biocontainers/mtbseq:1.0.3--pl526_1'
+    validExitStatus 0,1,2 // FIXME
 
     input:
     tuple val(genomeFileName), path("${genomeFileName}_${params.mtbseq_library_name}_R?.fastq.gz")
@@ -27,9 +28,6 @@ process MTBSEQ_PER_SAMPLE {
     script:
 
     """
-    #ignore the silly exit 1 status even after successful execution
-    set +e
-
     gatk-register ${gatk_jar}
 
     mkdir ${genomeFileName}
