@@ -21,21 +21,19 @@ process MTBSEQ_PER_SAMPLE {
     env USER
 
     output:
-    path("""${genomeFileName}_results""") // Folder
     val("${genomeFileName}") // Genome name
+    path("""${genomeFileName}_results""") // Folder
     path("""${genomeFileName}_results/Called/*tab""")
-    path("""${genomeFileName}_results/Position_Tables/*tab")
+    path("""${genomeFileName}_results/Position_Tables/*tab""")
 
     script:
-
     """
-
     gatk-register ${gatk_jar}
 
     mkdir ${genomeFileName}_results
-   
+
     MTBseq --step TBfull --thread ${task.cpus}
-    
+
     mv  Amend ./${genomeFileName}_results/
     mv  Bam ./${genomeFileName}_results/
     mv  Called ./${genomeFileName}_results/
@@ -50,14 +48,13 @@ process MTBSEQ_PER_SAMPLE {
 
     stub:
     """
-    mkdir ${genomeFileName}_results
 
-    mkdir Called
-    touch Called/${genomeFileName}_somelib.gatk_position_uncovered_cf4_cr4_fr75_ph4_outmode000.tab
-    touch Called/${genomeFileName}_somelib.gatk_position_variants_cf4_cr4_fr75_ph4_outmode000.tab
+    mkdir ${genomeFileName}_results/Called -p
+    touch ${genomeFileName}_results/Called/${genomeFileName}_somelib.gatk_position_uncovered_cf4_cr4_fr75_ph4_outmode000.tab
+    touch ${genomeFileName}_results/Called/${genomeFileName}_somelib.gatk_position_variants_cf4_cr4_fr75_ph4_outmode000.tab
 
-    mkdir Position_Tables
-    touch Position_Tables/${genomeFileName}_somelib.gatk_position_table.tab
+    mkdir ${genomeFileName}_results/Position_Tables -p
+    touch ${genomeFileName}_results/Position_Tables/${genomeFileName}_somelib.gatk_position_table.tab
     """
 
 }
@@ -84,19 +81,14 @@ process MTBSEQ_COHORT {
     script:
 
     """
-    # NOTE: Ignore the silly exit 1 status even after successful execution.
-    set +e
 
     gatk-register ${gatk_jar}
-
-    set -uex
 
     export USER=$USER
 
     mkdir Joint && MTBseq --step TBjoin --samples ${samples_tsv_ch} --project ${params.mtbseq_project_name}
     mkdir Amend && MTBseq --step TBamend --samples ${samples_tsv_ch} --project ${params.mtbseq_project_name}
     mkdir Groups && MTBseq --step TBgroups --samples ${samples_tsv_ch} --project ${params.mtbseq_project_name}
-    
     """
 
     stub:
@@ -125,7 +117,7 @@ workflow test {
 //    samples_tsv_file_ch.count().view()
 //    samples_tsv_file_ch.view()
 
-samples_tsv_file_ch = MTBSEQ_PER_SAMPLE.out[1]
+samples_tsv_file_ch = MTBSEQ_PER_SAMPLE.out[0]
             .collect()
             .flatten().map { n ->  "$n" + "\t" + "$params.mtbseq_library_name" + "\n"  }
             .collectFile(name: 'samples.tsv', newLine: false, storeDir: "$params.resultsDir_mtbseq_cohort")
