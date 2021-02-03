@@ -10,7 +10,7 @@ params.shouldPublish_mtbseq_per_sample = true
 
 process MTBSEQ_PER_SAMPLE {
     tag "${genomeFileName}"
-    publishDir params.resultsDir_mtbseq_per_sample, pattern: "${genomeFileName}", mode: params.saveMode_mtbseq_per_sample, enabled: params.shouldPublish_mtbseq_per_sample
+    publishDir params.resultsDir_mtbseq_per_sample, pattern: "${genomeFileName}_results", mode: params.saveMode_mtbseq_per_sample, enabled: params.shouldPublish_mtbseq_per_sample
     container 'quay.io/biocontainers/mtbseq:1.0.3--pl526_1'
     validExitStatus 0,1,2
 
