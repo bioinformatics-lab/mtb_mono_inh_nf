@@ -12,7 +12,8 @@ process MTBSEQ_PER_SAMPLE {
     tag "${genomeFileName}"
     publishDir params.resultsDir_mtbseq_per_sample, pattern: "${genomeFileName}", mode: params.saveMode_mtbseq_per_sample, enabled: params.shouldPublish_mtbseq_per_sample
     container 'quay.io/biocontainers/mtbseq:1.0.3--pl526_1'
-    validExitStatus 0,1,2 // FIXME
+    validExitStatus 0,1,2
+
 
     input:
     tuple val(genomeFileName), path("${genomeFileName}_${params.mtbseq_library_name}_R?.fastq.gz")
@@ -20,35 +21,36 @@ process MTBSEQ_PER_SAMPLE {
     env USER
 
     output:
-    path("${genomeFileName}") // Folder
+    path("""${genomeFileName}_results""") // Folder
     val("${genomeFileName}") // Genome name
-    path("Called/*tab")
-    path("Position_Tables/*tab")
+    path("""${genomeFileName}_results/Called/*tab""")
+    path("""${genomeFileName}_results/Position_Tables/*tab")
 
     script:
 
     """
+
     gatk-register ${gatk_jar}
 
-    mkdir ${genomeFileName}
+    mkdir ${genomeFileName}_results
    
     MTBseq --step TBfull --thread ${task.cpus}
     
-    mv  Amend ./${genomeFileName}/
-    mv  Bam ./${genomeFileName}/
-    mv  Called ./${genomeFileName}/
-    mv  Classification ./${genomeFileName}/
-    mv  GATK_Bam ./${genomeFileName}/
-    mv  Groups ./${genomeFileName}/
-    mv  Joint ./${genomeFileName}/
-    mv  Mpileup ./${genomeFileName}/
-    mv  Position_Tables ./${genomeFileName}/
-    mv  Statistics ./${genomeFileName}/
+    mv  Amend ./${genomeFileName}_results/
+    mv  Bam ./${genomeFileName}_results/
+    mv  Called ./${genomeFileName}_results/
+    mv  Classification ./${genomeFileName}_results/
+    mv  GATK_Bam ./${genomeFileName}_results/
+    mv  Groups ./${genomeFileName}_results/
+    mv  Joint ./${genomeFileName}_results/
+    mv  Mpileup ./${genomeFileName}_results/
+    mv  Position_Tables ./${genomeFileName}_results/
+    mv  Statistics ./${genomeFileName}_results/
     """
 
     stub:
     """
-    mkdir ${genomeFileName}
+    mkdir ${genomeFileName}_results
 
     mkdir Called
     touch Called/${genomeFileName}_somelib.gatk_position_uncovered_cf4_cr4_fr75_ph4_outmode000.tab
