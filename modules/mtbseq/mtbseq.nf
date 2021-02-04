@@ -28,6 +28,8 @@ process MTBSEQ_PER_SAMPLE {
 
     script:
     """
+    set +e
+
     gatk-register ${gatk_jar}
 
     mkdir ${genomeFileName}_results
