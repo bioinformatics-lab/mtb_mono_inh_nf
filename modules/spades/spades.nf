@@ -16,19 +16,19 @@ process SPADES {
 
     output:
     path "${genomeName}_scaffolds.fasta", emit: quast_input
-    tuple val(genomeName), path("${genomeName}_scaffolds.fasta"), emit: prokka_input
+    tuple val(genomeName), path("${genomeName}_contigs.fasta"), emit: prokka_input
 
 
     script:
 
     """
     spades.py -k 21,33,55,77 --careful --only-assembler --pe1-1 ${genomeReads[0]} --pe1-2 ${genomeReads[1]} -o ${genomeName} -t ${task.cpus}
-    cp ${genomeName}/scaffolds.fasta ${genomeName}_scaffolds.fasta 
+    cp ${genomeName}/contigs.fasta ${genomeName}_contigs.fasta 
     """
 
     stub:
     """
-    touch ${genomeName}_scaffolds.fasta 
+    touch ${genomeName}_contigs.fasta 
     """
 }
 
