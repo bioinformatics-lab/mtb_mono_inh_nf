@@ -69,6 +69,7 @@ params.shouldPublish_mtbseq_cohort = true
 process MTBSEQ_COHORT {
     publishDir params.resultsDir_mtbseq_cohort, mode: params.saveMode_mtbseq_cohort, enabled: params.shouldPublish_mtbseq_cohort
     container 'quay.io/biocontainers/mtbseq:1.0.3--pl526_1'
+    validExitStatus 0,1,2
 
     input:
     path(samples_tsv_ch)
