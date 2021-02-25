@@ -58,6 +58,19 @@ workflow {
 }
 
 
+workflow SPADES_PROKKA_WF {
+
+    reads_ch = Channel.fromFilePairs(params.reads)
+
+    TRIMMOMATIC(reads_ch)
+    SPADES(TRIMMOMATIC.out)
+    PROKKA(SPADES.out)
+
+}
+
+
+
+
 workflow test {
     reads_ch = Channel.fromFilePairs(params.reads)
 
