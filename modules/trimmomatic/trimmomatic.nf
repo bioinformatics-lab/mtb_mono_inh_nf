@@ -50,6 +50,17 @@ process TRIMMOMATIC {
 
 
     """
+    echo "trimmomatic \                                                                
+    PE \                                                                         
+    -threads ${task.cpus} \                                                      
+    -phred33 \                                                                   
+    ${genomeReads[0]} \                                                          
+    ${genomeReads[1]} \                                                          
+    $fq_1_paired \                                                               
+    $fq_1_unpaired \                                                             
+    $fq_2_paired \                                                               
+    $fq_2_unpaired \                                                        
+    LEADING:3 TRAILING:3 SLIDINGWINDOW:4:20 MINLEN:36" 
     touch $fq_1_paired
     touch $fq_1_unpaired
     touch $fq_2_paired
