@@ -7,7 +7,6 @@ params.shouldPublish = true
 process PROKKA {
     tag "${genomeName}"
     publishDir params.resultsDir, mode: params.saveMode, enabled: params.shouldPublish
-    container 'quay.io/biocontainers/prokka:1.14.6--pl526_0'
 
     input:
     tuple val(genomeName),  path(bestContig)

@@ -7,9 +7,6 @@ params.shouldPublish = true
 
 process MULTIQC {
     publishDir params.resultsDir, mode: params.saveMode, enabled: params.shouldPublish
-    container 'quay.io/biocontainers/multiqc:1.9--pyh9f0ad1d_0'
-    cpus 8
-    memory "15 GB"
 
     input:
     path("""${params.fastqcResultsDir}""") from ch_in_multiqc
