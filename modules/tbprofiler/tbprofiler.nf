@@ -23,6 +23,8 @@ process TBPROFILER_PROFILE {
 
     stub:
     """
+    echo "tb-profiler profile -1 ${genomeReads[0]} -2 ${genomeReads[1]}  -t ${task.cpus} -p $genomeName --txt"
+
     mkdir results
     touch results/"${genomeName}.results.txt"
     touch results/"${genomeName}.results.json"
