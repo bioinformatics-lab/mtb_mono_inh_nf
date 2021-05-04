@@ -50,10 +50,20 @@ process TRIMMOMATIC {
 
 
     """
-    touch $fq_1_paired
-    touch $fq_1_unpaired
-    touch $fq_2_paired
-    touch $fq_2_unpaired
+    echo "trimmomatic \
+    PE \
+    -threads ${task.cpus} \
+    -phred33 \
+    ${genomeReads[0]} \
+    ${genomeReads[1]} \
+    $fq_1_paired \
+    $fq_1_unpaired \
+    $fq_2_paired \
+    $fq_2_unpaired \
+    LEADING:3 TRAILING:3 SLIDINGWINDOW:4:20 MINLEN:36"
+    
+    touch ${genomeName}_R1.p.fastq.gz
+    touch ${genomeName}_R2.p.fastq.gzcontainer 'quay.io/biocontainers/trimmomatic:0.35--6'
     """
 
 }
