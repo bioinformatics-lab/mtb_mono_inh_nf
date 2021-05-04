@@ -50,6 +50,7 @@ process MTBSEQ_PER_SAMPLE {
     stub:
     """
     echo "MTBseq --step TBfull --thread ${task.cpus}"
+
     mkdir ${genomeFileName}_results
     mkdir ${genomeFileName}_results/Called -p
     touch ${genomeFileName}_results/Called/${genomeFileName}_somelib.gatk_position_uncovered_cf4_cr4_fr75_ph4_outmode000.tab

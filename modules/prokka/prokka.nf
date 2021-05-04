@@ -17,6 +17,7 @@ process PROKKA {
     script:
 
     """
+    prokka --outdir ${genomeName} --prefix $genomeName ${bestContig} --cpus ${task.cpus}
     """
 
     stub:
