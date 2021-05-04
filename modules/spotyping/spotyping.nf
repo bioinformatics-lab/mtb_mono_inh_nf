@@ -25,6 +25,7 @@ process SPOTYPING {
 
     stub:
     """
+    echo "python /SpoTyping-v2.0/SpoTyping-v2.0-commandLine/SpoTyping.py ./${genomeReadToBeAnalyzed} -o ${genomeFileName}.txt"
     touch ${genomeFileName}.txt
     touch SITVIT_${genomeFileName}.xls
     """

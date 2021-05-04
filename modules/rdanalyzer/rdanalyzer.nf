@@ -26,6 +26,8 @@ process RDANALYZER {
 
     stub:
     """
+    echo "python /RD-Analyzer/RD-Analyzer.py -o ${genomeFileName} ${genomeReads[0]} ${genomeReads[1]}"
+
     touch ${genomeFileName}.result
     touch ${genomeFileName}.depth
     """
