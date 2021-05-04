@@ -71,3 +71,4 @@ touch 8461_S1_L001_R1_001.fastq.gz
 touch 8461_S1_L001_R2_001.fastq.gz
 touch NC000962_3.fasta
 touch NC000962_3.gbk
+touch GenomeAnalysisTK.jar
