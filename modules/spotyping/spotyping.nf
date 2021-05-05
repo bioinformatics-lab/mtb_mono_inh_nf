@@ -8,7 +8,6 @@ params.shouldPublish = true
 
 process SPOTYPING {
     tag "${genomeFileName}"
-    container 'quay.io/bioinformatics_playground/spotyping:0.0.1'
     publishDir params.resultsDir, mode: params.saveMode, enabled: params.shouldPublish
 
     input:
