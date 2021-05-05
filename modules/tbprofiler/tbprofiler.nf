@@ -7,7 +7,6 @@ params.shouldPublish_tbprofiler_per_sample = true
 
 process TBPROFILER_PROFILE {
     publishDir params.resultsDir_tbprofiler_per_sample, mode: params.saveMode_tbprofiler_per_sample, enabled: params.shouldPublish_tbprofiler_per_sample
-    container 'quay.io/biocontainers/tb-profiler:2.8.6--pypy_0'
 
     input:
     tuple val(genomeName), path(genomeReads)
@@ -40,7 +39,6 @@ params.shouldPublish_tbprofiler_cohort = true
 
 process TBPROFILER_COLLATE {
     publishDir params.resultsDir_tbprofiler_cohort, mode: params.saveMode_tbprofiler_cohort, enabled: params.shouldPublish_tbprofiler_cohort
-    container 'quay.io/biocontainers/tb-profiler:2.8.6--pypy_0'
 
     input:
     path("results/*")

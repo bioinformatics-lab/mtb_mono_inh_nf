@@ -8,7 +8,6 @@ params.shouldPublish = true
 
 process QUAST {
     publishDir params.resultsDir, mode: params.saveMode, enabled: params.shouldPublish
-    container 'quay.io/biocontainers/quast:5.0.2--py37pl526hb5aa323_2'
 
 
     input:
