@@ -8,8 +8,6 @@ params.saveMode = 'copy'
 process SPADES {
     tag "${genomeName}"
     publishDir params.resultsDir, mode: params.saveMode, enabled: params.shouldPublish
-    container 'quay.io/biocontainers/spades:3.14.0--h2d02072_0'
-
 
     input:
     tuple val(genomeName), path(genomeReads)
