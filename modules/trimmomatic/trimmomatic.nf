@@ -62,7 +62,7 @@ process TRIMMOMATIC {
     LEADING:3 TRAILING:3 SLIDINGWINDOW:4:20 MINLEN:36"
     
     touch ${genomeName}_R1.p.fastq.gz
-    touch ${genomeName}_R2.p.fastq.gzcontainer 'quay.io/biocontainers/trimmomatic:0.35--6'
+    touch ${genomeName}_R2.p.fastq.gzcontainer
     """
 
 }
