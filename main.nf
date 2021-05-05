@@ -19,7 +19,7 @@ workflow {
     gatk38_jar_ch = Channel.value(java.nio.file.Paths.get("$params.gatk38_jar"))
     env_user_ch = Channel.value("root")
 
-    FASTQC_UNTRIMMED(reads_ch) // DONE
+    FASTQC_UNTRIMMED(reads_ch)
     TRIMMOMATIC(reads_ch) // DONE
 //    FASTQC_TRIMMED(TRIMMOMATIC.out)
 
@@ -70,4 +70,3 @@ workflow test {
 
     reads_ch.view()
 }
-
