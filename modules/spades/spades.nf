@@ -28,6 +28,7 @@ process SPADES {
     """
     echo "spades.py -k 21,33,55,77 --careful --only-assembler --pe1-1 ${genomeReads[0]} --pe1-2 ${genomeReads[1]} -o ${genomeName} -t ${task.cpus}"
 
+    touch ${genomeName}_scaffolds.fasta
     touch ${genomeName}_contigs.fasta 
     """
 }

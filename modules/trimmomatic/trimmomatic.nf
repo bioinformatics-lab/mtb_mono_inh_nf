@@ -64,6 +64,7 @@ process TRIMMOMATIC {
     touch ${genomeName}_R1.p.fastq.gz
     touch ${genomeName}_R2.p.fastq.gz
 
+
     """
 
 }

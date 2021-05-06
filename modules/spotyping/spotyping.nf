@@ -24,6 +24,7 @@ process SPOTYPING {
     """
 
     stub:
+    genomeReadToBeAnalyzed = params.R2 ? genomeReads[1] : genomeReads[0]
     """
     echo "python /SpoTyping-v2.0/SpoTyping-v2.0-commandLine/SpoTyping.py ./${genomeReadToBeAnalyzed} -o ${genomeFileName}.txt"
     touch ${genomeFileName}.txt
