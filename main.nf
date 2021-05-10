@@ -19,9 +19,11 @@ workflow {
     gatk38_jar_ch = Channel.value(java.nio.file.Paths.get("$params.gatk38_jar"))
     env_user_ch = Channel.value("root")
 
-    FASTQC_UNTRIMMED(reads_ch)
-    TRIMMOMATIC(reads_ch) // DONE
-//    FASTQC_TRIMMED(TRIMMOMATIC.out)
+
+   FASTQC_UNTRIMMED(reads_ch)
+    TRIMMOMATIC(reads_ch)
+    FASTQC_TRIMMED(TRIMMOMATIC.out)
+
 
     MTBSEQ_PER_SAMPLE(TRIMMOMATIC.out,
             gatk38_jar_ch,
@@ -40,6 +42,7 @@ workflow {
             gatk38_jar_ch,
             env_user_ch,
     )
+
     RDANALYZER(TRIMMOMATIC.out)
     SPOTYPING(TRIMMOMATIC.out)
     SPADES(TRIMMOMATIC.out)
@@ -47,6 +50,7 @@ workflow {
 //    QUAST(SPADES.out.quast_input.collect()) // TODO
     TBPROFILER_PROFILE(TRIMMOMATIC.out)
     TBPROFILER_COLLATE(TBPROFILER_PROFILE.out.collect())
+
 
 
 }

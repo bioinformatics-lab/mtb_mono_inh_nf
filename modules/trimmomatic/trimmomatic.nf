@@ -62,7 +62,9 @@ process TRIMMOMATIC {
     LEADING:3 TRAILING:3 SLIDINGWINDOW:4:20 MINLEN:36"
     
     touch ${genomeName}_R1.p.fastq.gz
-    touch ${genomeName}_R2.p.fastq.gzcontainer
+    touch ${genomeName}_R2.p.fastq.gz
+
+
     """
 
 }
