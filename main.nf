@@ -20,14 +20,13 @@ workflow {
     env_user_ch = Channel.value("root")
 
 
-   FASTQC_UNTRIMMED(reads_ch)
+    FASTQC_UNTRIMMED(reads_ch)
     TRIMMOMATIC(reads_ch)
     FASTQC_TRIMMED(TRIMMOMATIC.out)
 
-
     MTBSEQ_PER_SAMPLE(TRIMMOMATIC.out,
             gatk38_jar_ch,
-            env_user_ch) // TODO
+            env_user_ch)
 
 
     samples_tsv_file_ch = MTBSEQ_PER_SAMPLE.out[0]
@@ -47,7 +46,9 @@ workflow {
     SPOTYPING(TRIMMOMATIC.out)
     SPADES(TRIMMOMATIC.out)
     PROKKA(SPADES.out.prokka_input)
-//    QUAST(SPADES.out.quast_input.collect()) // TODO
+
+    QUAST(SPADES.out.quast_input.collect())
+
     TBPROFILER_PROFILE(TRIMMOMATIC.out)
     TBPROFILER_COLLATE(TBPROFILER_PROFILE.out.collect())
 
@@ -62,7 +63,7 @@ workflow SPADES_PROKKA_WF {
 
     TRIMMOMATIC(reads_ch)
     SPADES(TRIMMOMATIC.out)
-    PROKKA(SPADES.out)
+    PROKKA(SPADES.out.prokka_input)
 
 }
 

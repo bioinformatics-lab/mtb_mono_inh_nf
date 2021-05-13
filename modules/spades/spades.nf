@@ -13,7 +13,7 @@ process SPADES {
     tuple val(genomeName), path(genomeReads)
 
     output:
-    path "${genomeName}_scaffolds.fasta", emit: quast_input
+    path "${genomeName}_contigs.fasta", emit: quast_input
     tuple val(genomeName), path("${genomeName}_contigs.fasta"), emit: prokka_input
 
 
