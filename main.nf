@@ -13,7 +13,6 @@ include { TBPROFILER_PROFILE; TBPROFILER_COLLATE } from "./modules/tbprofiler/tb
 include { TRIMMOMATIC } from "./modules/trimmomatic/trimmomatic.nf"
 
 
-
 workflow {
     reads_ch = Channel.fromFilePairs(params.reads)
     gatk38_jar_ch = Channel.value(java.nio.file.Paths.get("$params.gatk38_jar"))
@@ -31,7 +30,7 @@ workflow {
 
     samples_tsv_file_ch = MTBSEQ_PER_SAMPLE.out[0]
             .collect()
-            .flatten().map { n ->  "$n" + "\t" + "$params.mtbseq_library_name" + "\n"  }
+            .flatten().map { n -> "$n" + "\t" + "$params.mtbseq_library_name" + "\n" }
             .collectFile(name: 'samples.tsv', newLine: false, storeDir: "$params.resultsDir_mtbseq_cohort")
 
     MTBSEQ_COHORT(
@@ -53,7 +52,6 @@ workflow {
     TBPROFILER_COLLATE(TBPROFILER_PROFILE.out.collect())
 
 
-
 }
 
 
@@ -66,8 +64,6 @@ workflow SPADES_PROKKA_WF {
     PROKKA(SPADES.out.prokka_input)
 
 }
-
-
 
 
 workflow test {
