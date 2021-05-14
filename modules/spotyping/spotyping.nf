@@ -1,4 +1,4 @@
-nextflow.enable.dsl=2
+nextflow.enable.dsl = 2
 
 params.resultsDir = "${params.outdir}/spotyping"
 params.saveMode = 'copy'
@@ -36,19 +36,18 @@ process SPOTYPING {
 
 workflow test {
 
-params.TRIMMOMATIC = [
-	shouldPublish: false
-]
+    params.TRIMMOMATIC = [
+            shouldPublish: false
+    ]
 
 
-include { TRIMMOMATIC } from "../trimmomatic/trimmomatic.nf" addParams( params.TRIMMOMATIC )
+    include { TRIMMOMATIC } from "../trimmomatic/trimmomatic.nf" addParams(params.TRIMMOMATIC)
 
-input_ch = Channel.fromFilePairs("$launchDir/test_data/*_{1,2}.fastq.gz")
+    input_ch = Channel.fromFilePairs("$launchDir/test_data/*_{1,2}.fastq.gz")
 
-TRIMMOMATIC(input_ch)
+    TRIMMOMATIC(input_ch)
 
-SPOTYPING(TRIMMOMATIC.out)
-
+    SPOTYPING(TRIMMOMATIC.out)
 
 
 }

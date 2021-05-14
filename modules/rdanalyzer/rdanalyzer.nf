@@ -1,5 +1,4 @@
-
-nextflow.enable.dsl= 2
+nextflow.enable.dsl = 2
 
 params.saveMode = 'copy'
 params.resultsDir = "${params.outdir}/rdanalyzer"
@@ -37,14 +36,13 @@ process RDANALYZER {
 
 workflow test {
 
-include { TRIMMOMATIC } from "../trimmomatic/trimmomatic.nf"
+    include { TRIMMOMATIC } from "../trimmomatic/trimmomatic.nf"
 
-input_ch = Channel.fromFilePairs("$launchDir/test_data/*_{1,2}.fastq.gz")
+    input_ch = Channel.fromFilePairs("$launchDir/test_data/*_{1,2}.fastq.gz")
 
-TRIMMOMATIC(input_ch)
+    TRIMMOMATIC(input_ch)
 
-RD_ANALYZER(TRIMMOMATIC.out)
-
+    RD_ANALYZER(TRIMMOMATIC.out)
 
 
 }

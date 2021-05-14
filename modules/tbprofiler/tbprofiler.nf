@@ -1,4 +1,4 @@
-nextflow.enable.dsl= 2
+nextflow.enable.dsl = 2
 
 params.resultsDir_tbprofiler_per_sample = "${params.outdir}/tbprofiler/samples"
 params.saveMode_tbprofiler_per_sample = 'copy'

@@ -1,4 +1,4 @@
-nextflow.enable.dsl= 2
+nextflow.enable.dsl = 2
 
 
 params.saveMode = 'copy'
@@ -24,7 +24,7 @@ process TRIMMOMATIC {
     fq_2_paired = genomeName + '_R2.p.fastq.gz'
     fq_2_unpaired = genomeName + '_R2.s.fastq.gz'
 
-    def adapter_file = "/usr/local/share/trimmomatic-0.35-6/adapters/NexteraPE-PE.fa"
+    def adapterFile = "/usr/local/share/trimmomatic-0.35-6/adapters/NexteraPE-PE.fa"
 
     """
     trimmomatic \
@@ -37,7 +37,7 @@ process TRIMMOMATIC {
     $fq_1_unpaired \
     $fq_2_paired \
     $fq_2_unpaired \
-    ILLUMINACLIP:${adapter_file}:2:40:15  \
+    ILLUMINACLIP:${adapterFile}:2:40:15  \
     LEADING:3 TRAILING:3 SLIDINGWINDOW:3:28 HEADCROP:20 MINLEN:40
     """
 
@@ -47,7 +47,7 @@ process TRIMMOMATIC {
     fq_2_paired = genomeName + '_R2.p.fastq.gz'
     fq_2_unpaired = genomeName + '_R2.s.fastq.gz'
 
-    def adapter_file = "/usr/local/share/trimmomatic-0.35-6/adapters/NexteraPE-PE.fa"
+    adapterFile = "/usr/local/share/trimmomatic-0.35-6/adapters/NexteraPE-PE.fa"
 
     """
     echo "trimmomatic \
@@ -60,7 +60,7 @@ process TRIMMOMATIC {
     $fq_1_unpaired \
     $fq_2_paired \
     $fq_2_unpaired \
-    ILLUMINACLIP:${adapter_file}:2:40:15  \
+    ILLUMINACLIP:${adapterFile}:2:40:15  \
     LEADING:3 TRAILING:3 SLIDINGWINDOW:3:28 HEADCROP:20 MINLEN:40"
 
     touch ${genomeName}_R1.p.fastq.gz
