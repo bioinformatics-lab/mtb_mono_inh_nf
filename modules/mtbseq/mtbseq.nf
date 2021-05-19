@@ -115,6 +115,8 @@ workflow test {
 
     TRIMMOMATIC(input_reads_ch)
     MTBSEQ_PER_SAMPLE(TRIMMOMATIC.out,
+            gatk_jar_ch,
+            user_ch)
 
 //    samples_tsv_file_ch = MTBSEQ_PER_SAMPLE.out[1].collect().flatten().map { n ->  "$n" + "\t" + "$params.mtbseq_library_name" + "\n"  }
 //    samples_tsv_file_ch.count().view()
