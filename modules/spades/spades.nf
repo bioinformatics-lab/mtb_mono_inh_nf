@@ -1,8 +1,8 @@
-nextflow.enable.dsl=2
+nextflow.enable.dsl = 2
 
 
 params.resultsDir = "${params.outdir}/spades"
-params.shouldPublish= true
+params.shouldPublish = true
 params.saveMode = 'copy'
 
 process SPADES {
@@ -34,17 +34,16 @@ process SPADES {
 }
 
 
-
 workflow test {
 
 
-include { TRIMMOMATIC } from "$launchDir/modules/trimmomatic/trimmomatic.nf"
+    include { TRIMMOMATIC } from "$launchDir/modules/trimmomatic/trimmomatic.nf"
 
-input_reads_ch = Channel.fromFilePairs("$launchDir/data/mock_data/*_{R1,R2}*fastq.gz")
+    input_reads_ch = Channel.fromFilePairs("$launchDir/data/mock_data/*_{R1,R2}*fastq.gz")
 
-TRIMMOMATIC(input_reads_ch)
+    TRIMMOMATIC(input_reads_ch)
 
-SPADES(TRIMMOMATIC.out)
+    SPADES(TRIMMOMATIC.out)
 
-SPADES.out.collect().view()
+    SPADES.out.collect().view()
 }

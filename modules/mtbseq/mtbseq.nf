@@ -12,7 +12,7 @@ process MTBSEQ_PER_SAMPLE {
     tag "${genomeFileName}"
     publishDir params.resultsDir_mtbseq_per_sample, pattern: "${genomeFileName}_results", mode: params.saveMode_mtbseq_per_sample, enabled: params.shouldPublish_mtbseq_per_sample
     // TODO port to errorStrategy and maxRetries
-    validExitStatus 0,1,2
+    validExitStatus 0, 1, 2
 
 
     input:
@@ -70,7 +70,7 @@ params.shouldPublish_mtbseq_cohort = true
 process MTBSEQ_COHORT {
     publishDir params.resultsDir_mtbseq_cohort, mode: params.saveMode_mtbseq_cohort, enabled: params.shouldPublish_mtbseq_cohort
     // TODO port to errorStrategy and maxRetries
-    validExitStatus 0,1,2
+    validExitStatus 0, 1, 2
 
     input:
     path(samples_tsv_ch)
@@ -115,16 +115,14 @@ workflow test {
 
     TRIMMOMATIC(input_reads_ch)
     MTBSEQ_PER_SAMPLE(TRIMMOMATIC.out,
-                        gatk_jar_ch,
-                        user_ch)
 
 //    samples_tsv_file_ch = MTBSEQ_PER_SAMPLE.out[1].collect().flatten().map { n ->  "$n" + "\t" + "$params.mtbseq_library_name" + "\n"  }
 //    samples_tsv_file_ch.count().view()
 //    samples_tsv_file_ch.view()
 
-samples_tsv_file_ch = MTBSEQ_PER_SAMPLE.out[0]
+    samples_tsv_file_ch = MTBSEQ_PER_SAMPLE.out[0]
             .collect()
-            .flatten().map { n ->  "$n" + "\t" + "$params.mtbseq_library_name" + "\n"  }
+            .flatten().map { n -> "$n" + "\t" + "$params.mtbseq_library_name" + "\n" }
             .collectFile(name: 'samples.tsv', newLine: false, storeDir: "$params.resultsDir_mtbseq_cohort")
 
 
