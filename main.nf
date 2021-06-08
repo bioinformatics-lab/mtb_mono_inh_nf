@@ -2,6 +2,8 @@ nextflow.enable.dsl = 2
 
 include { FASTQC as FASTQC_UNTRIMMED } from "./modules/fastqc/fastqc.nf" addParams(resultsDir: "${params.outdir}/fastqc_untrimmed")
 include { FASTQC as FASTQC_TRIMMED } from "./modules/fastqc/fastqc.nf" addParams(resultsDir: "${params.outdir}/fastqc_trimmed")
+include { MULTIQC as MULTIQC_TRIMMED } from "./modules/multiqc/multiqc.nf" addParams(resultsDir: "${params.outdir}/multiqc_trimmed", fastqcResultsDir: "${params.outdir}/fastqc_trimmed")
+include { MULTIQC as MULTIQC_UNTRIMMED } from "./modules/multiqc/multiqc.nf" addParams(resultsDir: "${params.outdir}/multiqc_untrimmed", fastqcResultsDir: "${params.outdir}/fastqc_untrimmed")
 include { MTBSEQ_PER_SAMPLE; MTBSEQ_COHORT } from "./modules/mtbseq/mtbseq.nf"
 include { MULTIQC } from "./modules/multiqc/multiqc.nf"
 include { PROKKA } from "./modules/prokka/prokka.nf"
@@ -53,6 +55,26 @@ workflow {
 
 
 }
+
+
+workflow SAME_PERSON_GENOMES_WF {
+    reads_ch = Channel.fromFilePairs(params.reads)
+
+    FASTQC_UNTRIMMED(reads_ch)
+    MULTIQC_UNTRIMMED(FASTQC_UNTRIMMED.out.flatten().collect())
+    TRIMMOMATIC(reads_ch)
+    FASTQC_TRIMMED(TRIMMOMATIC.out)
+    MULTIQC_TRIMMED(FASTQC_TRIMMED.out.flatten().collect())
+
+    SPOTYPING(TRIMMOMATIC.out)
+
+    TBPROFILER_PROFILE(TRIMMOMATIC.out)
+    TBPROFILER_COLLATE(TBPROFILER_PROFILE.out.collect())
+
+
+}
+
+
 
 
 workflow SPADES_PROKKA_WF {
