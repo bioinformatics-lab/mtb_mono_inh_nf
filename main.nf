@@ -22,8 +22,11 @@ workflow {
 
 
     FASTQC_UNTRIMMED(reads_ch)
+    MULTIQC_UNTRIMMED(FASTQC_UNTRIMMED.out.flatten().collect())
     TRIMMOMATIC(reads_ch)
     FASTQC_TRIMMED(TRIMMOMATIC.out)
+    MULTIQC_TRIMMED(FASTQC_TRIMMED.out.flatten().collect())
+
 
     MTBSEQ_PER_SAMPLE(TRIMMOMATIC.out,
             gatk38_jar_ch,
@@ -75,6 +78,48 @@ workflow SAME_PERSON_GENOMES_WF {
 }
 
 
+workflow AWS_WF {
+    reads_ch = Channel.fromFilePairs(params.reads)
+    gatk38_jar_ch = Channel.value(java.nio.file.Paths.get("$params.gatk38_jar"))
+    env_user_ch = Channel.value("root")
+
+
+    // FASTQC_UNTRIMMED(reads_ch)
+    // TRIMMOMATIC(reads_ch)
+    // FASTQC_TRIMMED(TRIMMOMATIC.out)
+    //
+    trimmomatic_ch = Channel.of()
+
+    MTBSEQ_PER_SAMPLE(trimmomatic_ch,
+            gatk38_jar_ch,
+            env_user_ch)
+
+
+    samples_tsv_file_ch = MTBSEQ_PER_SAMPLE.out[0]
+            .collect()
+            .flatten().map { n -> "$n" + "\t" + "$params.mtbseq_library_name" + "\n" }
+            .collectFile(name: 'samples.tsv', newLine: false, storeDir: "$params.resultsDir_mtbseq_cohort")
+
+    MTBSEQ_COHORT(
+            samples_tsv_file_ch,
+            MTBSEQ_PER_SAMPLE.out[2].collect(),
+            MTBSEQ_PER_SAMPLE.out[3].collect(),
+            gatk38_jar_ch,
+            env_user_ch,
+    )
+
+    // RDANALYZER(TRIMMOMATIC.out)
+    SPOTYPING(trimmomatic_ch)
+    SPADES(trimmomatic_ch)
+    PROKKA(SPADES.out.prokka_input)
+
+    QUAST(SPADES.out.quast_input.collect())
+
+    TBPROFILER_PROFILE(trimmomatic_ch)
+    TBPROFILER_COLLATE(TBPROFILER_PROFILE.out.collect())
+
+
+}
 
 
 workflow SPADES_PROKKA_WF {
@@ -88,8 +133,8 @@ workflow SPADES_PROKKA_WF {
 }
 
 
-workflow test {
-    reads_ch = Channel.fromFilePairs(params.reads)
+workflow test_wf {
+    trimmomatic_ch = Channel.fromFilePairs("s3://bucket-eu-west-1-ireland/mono_inh_cristina/results/trimmomatic/*_{R1,R2}.p.fastq.gz")
 
-    reads_ch.view()
+    trimmomatic_ch.view()
 }
