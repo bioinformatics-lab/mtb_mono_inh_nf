@@ -79,7 +79,7 @@ workflow SAME_PERSON_GENOMES_WF {
 
 
 workflow AWS_WF {
-    reads_ch = Channel.fromFilePairs(params.reads)
+    // reads_ch = Channel.fromFilePairs(params.reads)
     env_user_ch = Channel.value("root")
 
 
