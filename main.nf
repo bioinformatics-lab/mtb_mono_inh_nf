@@ -88,7 +88,8 @@ workflow AWS_WF {
     // TRIMMOMATIC(reads_ch)
     // FASTQC_TRIMMED(TRIMMOMATIC.out)
     //
-    trimmomatic_ch = Channel.of()
+
+    trimmomatic_ch = Channel.fromFilePairs("s3://bucket-eu-west-1-ireland/mono_inh_cristina/results/trimmomatic/*_{R1,R2}.p.fastq.gz")
 
     MTBSEQ_PER_SAMPLE(trimmomatic_ch,
             gatk38_jar_ch,
