@@ -27,18 +27,8 @@ process QUAST {
     """
     echo "quast ${scaffoldFiles}"
 
-    mkdir basic_stats/
-    mkdir icarus_viewers/
-    
-    touch icarus.html
-    touch report.html
-    touch report.pdf
-    touch report.tex
-    touch report.tsv
-    touch report.txt
-    touch transposed_report.tex
-    touch transposed_report.tsv
-    touch transposed_report.txt 
+    mkdir quast_results/
+
     """
 }
 
