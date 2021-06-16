@@ -6,6 +6,7 @@ params.shouldPublish_tbprofiler_per_sample = true
 
 
 process TBPROFILER_PROFILE {
+    tag "${genomeName}"
     publishDir params.resultsDir_tbprofiler_per_sample, mode: params.saveMode_tbprofiler_per_sample, enabled: params.shouldPublish_tbprofiler_per_sample
 
     input:
