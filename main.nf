@@ -17,7 +17,7 @@ include { TRIMMOMATIC } from "./modules/trimmomatic/trimmomatic.nf"
 
 workflow {
     reads_ch = Channel.fromFilePairs(params.reads)
-    gatk38_jar_ch = Channel.value(java.nio.file.Paths.get("$params.gatk38_jar"))
+
     env_user_ch = Channel.value("root")
 
 
@@ -29,8 +29,8 @@ workflow {
 
 
     MTBSEQ_PER_SAMPLE(TRIMMOMATIC.out,
-            gatk38_jar_ch,
-            env_user_ch)
+                      params.gatk38_jar,
+                      env_user_ch)
 
 
     samples_tsv_file_ch = MTBSEQ_PER_SAMPLE.out[0]
@@ -42,7 +42,7 @@ workflow {
             samples_tsv_file_ch,
             MTBSEQ_PER_SAMPLE.out[2].collect(),
             MTBSEQ_PER_SAMPLE.out[3].collect(),
-            gatk38_jar_ch,
+            params.gatk38_jar,
             env_user_ch,
     )
 
@@ -80,7 +80,6 @@ workflow SAME_PERSON_GENOMES_WF {
 
 workflow AWS_WF {
     reads_ch = Channel.fromFilePairs(params.reads)
-    gatk38_jar_ch = Channel.value(java.nio.file.Paths.get("$params.gatk38_jar"))
     env_user_ch = Channel.value("root")
 
 
@@ -92,9 +91,8 @@ workflow AWS_WF {
     trimmomatic_ch = Channel.fromFilePairs("s3://bucket-eu-west-1-ireland/mono_inh_cristina/results/trimmomatic/*_{R1,R2}.p.fastq.gz")
 
     MTBSEQ_PER_SAMPLE(trimmomatic_ch,
-            gatk38_jar_ch,
-            env_user_ch)
-
+                      params.gatk38_jar,
+                      env_user_ch)
 
     samples_tsv_file_ch = MTBSEQ_PER_SAMPLE.out[0]
             .collect()
@@ -105,8 +103,8 @@ workflow AWS_WF {
             samples_tsv_file_ch,
             MTBSEQ_PER_SAMPLE.out[2].collect(),
             MTBSEQ_PER_SAMPLE.out[3].collect(),
-            gatk38_jar_ch,
-            env_user_ch,
+            params.gatk38_jar,
+            env_user_ch
     )
 
     // RDANALYZER(TRIMMOMATIC.out)
