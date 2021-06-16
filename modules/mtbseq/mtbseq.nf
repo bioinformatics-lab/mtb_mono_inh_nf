@@ -89,16 +89,18 @@ process MTBSEQ_COHORT {
 
     gatk-register ${gatk_jar}
 
+    sleep 10
+
     mkdir Joint
     MTBseq --step TBjoin --samples ${samples_tsv_ch} --project ${params.mtbseq_project_name}
 
+    mkdir Amend
+    MTBseq --step TBamend --samples ${samples_tsv_ch} --project ${params.mtbseq_project_name}
+
+    mkdir Groups
+    MTBseq --step TBgroups --samples ${samples_tsv_ch} --project ${params.mtbseq_project_name}
+
     """
-
-    // mkdir Amend
-    // MTBseq --step TBamend --samples ${samples_tsv_ch} --project ${params.mtbseq_project_name}
-
-    // mkdir Groups
-    // MTBseq --step TBgroups --samples ${samples_tsv_ch} --project ${params.mtbseq_project_name}
 
 
 
