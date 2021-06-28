@@ -4,13 +4,13 @@ nextflow.enable.dsl = 2
 // - tar -xvf GATK_TAR_FILE
 // - gatk-register gatk_folder/gatk_jar
 
-params.resultsDir_mtbseq_per_sample = "${params.outdir}/mtbseq/samples"
-params.saveMode_mtbseq_per_sample = 'copy'
-params.shouldPublish_mtbseq_per_sample = true
+params.results_dir_mtbseq_per_sample = "${params.outdir}/mtbseq/samples"
+params.save_mode_mtbseq_per_sample = 'copy'
+params.should_publish_mtbseq_per_sample = true
 
 process MTBSEQ_PER_SAMPLE {
     tag "${genomeFileName}"
-    publishDir params.resultsDir_mtbseq_per_sample, pattern: "${genomeFileName}_results", mode: params.saveMode_mtbseq_per_sample, enabled: params.shouldPublish_mtbseq_per_sample
+    publishDir params.results_dir_mtbseq_per_sample, pattern: "${genomeFileName}_results", mode: params.save_mode_mtbseq_per_sample, enabled: params.should_publish_mtbseq_per_sample
     // TODO port to errorStrategy and maxRetries
     validExitStatus 0, 1, 2
 
@@ -63,12 +63,12 @@ process MTBSEQ_PER_SAMPLE {
 }
 
 
-params.resultsDir_mtbseq_cohort = "${params.outdir}/mtbseq/cohort"
-params.saveMode_mtbseq_cohort = 'copy'
-params.shouldPublish_mtbseq_cohort = true
+params.results_dir_mtbseq_cohort = "${params.outdir}/mtbseq/cohort"
+params.save_mode_mtbseq_cohort = 'copy'
+params.should_publish_mtbseq_cohort = true
 
 process MTBSEQ_COHORT {
-    publishDir params.resultsDir_mtbseq_cohort, mode: params.saveMode_mtbseq_cohort, enabled: params.shouldPublish_mtbseq_cohort
+    publishDir params.results_dir_mtbseq_cohort, mode: params.save_mode_mtbseq_cohort, enabled: params.should_publish_mtbseq_cohort
     // TODO port to errorStrategy and maxRetries
     validExitStatus 0, 1, 2
 
@@ -133,7 +133,7 @@ workflow test {
     samples_tsv_file_ch = MTBSEQ_PER_SAMPLE.out[0]
             .collect()
             .flatten().map { n -> "$n" + "\t" + "$params.mtbseq_library_name" + "\n" }
-            .collectFile(name: 'samples.tsv', newLine: false, storeDir: "$params.resultsDir_mtbseq_cohort")
+            .collectFile(name: 'samples.tsv', newLine: false, storeDir: "$params.results_dir_mtbseq_cohort")
 
 
     MTBSEQ_COHORT(

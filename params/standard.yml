@@ -14,5 +14,5 @@ mtbseq_project_name:
         MonoINH
 
 
-resultsDir_mtbseq_cohort: 
+results_dir_mtbseq_cohort: 
         ./results/mtbseq/cohort

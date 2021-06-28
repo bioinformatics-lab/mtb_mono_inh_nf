@@ -36,7 +36,7 @@ workflow {
     samples_tsv_file_ch = MTBSEQ_PER_SAMPLE.out[0]
             .collect()
             .flatten().map { n -> "$n" + "\t" + "$params.mtbseq_library_name" + "\n" }
-            .collectFile(name: 'samples.tsv', newLine: false, storeDir: "$params.resultsDir_mtbseq_cohort")
+            .collectFile(name: 'samples.tsv', newLine: false, storeDir: "$params.results_dir_mtbseq_cohort")
 
     MTBSEQ_COHORT(
             samples_tsv_file_ch,
@@ -97,7 +97,7 @@ workflow AWS_WF {
     samples_tsv_file_ch = MTBSEQ_PER_SAMPLE.out[0]
             .collect()
             .flatten().map { n -> "$n" + "\t" + "$params.mtbseq_library_name" + "\n" }
-            .collectFile(name: 'samples.tsv', newLine: false, storeDir: "$params.resultsDir_mtbseq_cohort")
+            .collectFile(name: 'samples.tsv', newLine: false, storeDir: "$params.results_dir_mtbseq_cohort")
 
     MTBSEQ_COHORT(
             samples_tsv_file_ch,
