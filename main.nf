@@ -4,7 +4,8 @@ include { FASTQC as FASTQC_UNTRIMMED } from "./modules/fastqc/fastqc.nf" addPara
 include { FASTQC as FASTQC_TRIMMED } from "./modules/fastqc/fastqc.nf" addParams(resultsDir: "${params.outdir}/fastqc_trimmed")
 include { MULTIQC as MULTIQC_TRIMMED } from "./modules/multiqc/multiqc.nf" addParams(resultsDir: "${params.outdir}/multiqc_trimmed", fastqcResultsDir: "${params.outdir}/fastqc_trimmed")
 include { MULTIQC as MULTIQC_UNTRIMMED } from "./modules/multiqc/multiqc.nf" addParams(resultsDir: "${params.outdir}/multiqc_untrimmed", fastqcResultsDir: "${params.outdir}/fastqc_untrimmed")
-include { MTBSEQ_PER_SAMPLE; MTBSEQ_COHORT } from "./modules/mtbseq/mtbseq.nf"
+include { MTBSEQ_PER_SAMPLE } from "./modules/mtbseq/mtbseq_per_sample.nf"
+include { MTBSEQ_COHORT } from "./modules/mtbseq/mtbseq_cohort.nf"
 include { MULTIQC } from "./modules/multiqc/multiqc.nf"
 include { PROKKA } from "./modules/prokka/prokka.nf"
 include { RDANALYZER } from "./modules/rdanalyzer/rdanalyzer.nf"
