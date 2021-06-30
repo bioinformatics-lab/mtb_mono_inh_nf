@@ -4,13 +4,13 @@ nextflow.enable.dsl = 2
 // - tar -xvf GATK_TAR_FILE
 // - gatk-register gatk_folder/gatk_jar
 
-params.results_dir_mtbseq_per_sample = "${params.outdir}/mtbseq/samples"
-params.save_mode_mtbseq_per_sample = 'copy'
-params.should_publish_mtbseq_per_sample = true
+params.results_dir = "${params.outdir}/mtbseq/per_sample"
+params.save_mode = 'copy'
+params.should_publish = true
 
 process MTBSEQ_PER_SAMPLE {
     tag "${genomeFileName}"
-    publishDir params.results_dir_mtbseq_per_sample, pattern: "${genomeFileName}_results", mode: params.save_mode_mtbseq_per_sample, enabled: params.should_publish_mtbseq_per_sample
+    publishDir params.results_dir, pattern: "${genomeFileName}_results", mode: params.save_mode, enabled: params.should_publish
     // TODO port to errorStrategy and maxRetries
     validExitStatus 0, 1, 2
 
@@ -62,60 +62,11 @@ process MTBSEQ_PER_SAMPLE {
 
 }
 
-
-params.results_dir_mtbseq_cohort = "${params.outdir}/mtbseq/cohort"
-params.save_mode_mtbseq_cohort = 'copy'
-params.should_publish_mtbseq_cohort = true
-
-process MTBSEQ_COHORT {
-    publishDir params.results_dir_mtbseq_cohort, mode: params.save_mode_mtbseq_cohort, enabled: params.should_publish_mtbseq_cohort
-    // TODO port to errorStrategy and maxRetries
-    validExitStatus 0, 1, 2
-
-    input:
-    path(samples_tsv_ch)
-    path("Called/*")
-    path("Position_Tables/*")
-    path(gatk_jar)
-    env USER
-
-    output:
-    tuple path("Joint"), path("Amend"), path("Groups")
-
-    script:
-
-    """
-    set +e
-
-    gatk-register ${gatk_jar}
-
-    sleep 10
-
-    mkdir Joint
-    MTBseq --step TBjoin --samples ${samples_tsv_ch} --project ${params.mtbseq_project_name}
-
-    mkdir Amend
-    MTBseq --step TBamend --samples ${samples_tsv_ch} --project ${params.mtbseq_project_name}
-
-    mkdir Groups
-    MTBseq --step TBgroups --samples ${samples_tsv_ch} --project ${params.mtbseq_project_name}
-
-    """
-
-
-
-    stub:
-
-    """
-    mkdir Joint Amend Groups
-    """
-
-}
-
 workflow test {
 
 
     include { TRIMMOMATIC } from "../../modules/trimmomatic/trimmomatic.nf"
+    include { MTBSEQ_COHORT } from "../../modules/mtbseq/mtbseq_cohort.nf"
 
     input_reads_ch = Channel.fromFilePairs("$launchDir/data/mock_data/*_{R1,R2}*fastq.gz")
     gatk_jar_ch = Channel.value("$launchDir/resources/GenomeAnalysisTK.jar")
