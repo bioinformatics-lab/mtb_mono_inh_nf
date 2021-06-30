@@ -12,7 +12,3 @@ mtbseq_library_name:
 
 mtbseq_project_name:
         MonoINH
-
-
-results_dir_mtbseq_cohort: 
-        ./results/mtbseq/cohort
