@@ -1,14 +1,14 @@
 nextflow.enable.dsl = 2
 
-params.resultsDir = "${params.outdir}/spotyping"
-params.saveMode = 'copy'
+params.results_dir = "${params.outdir}/spotyping"
+params.save_mode = 'copy'
 params.R2 = false
-params.shouldPublish = true
+params.should_publish = true
 
 
 process SPOTYPING {
     tag "${genomeFileName}"
-    publishDir params.resultsDir, mode: params.saveMode, enabled: params.shouldPublish
+    publishDir params.results_dir, mode: params.save_mode, enabled: params.should_publish
 
     input:
     tuple val(genomeFileName), path(genomeReads)
