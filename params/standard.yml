@@ -1,5 +1,5 @@
 outdir:
-        ./results
+        ./results/same_person_genomes
 
 gatk38_jar:
         ./resources/GenomeAnalysisTK.jar
@@ -12,7 +12,3 @@ mtbseq_library_name:
 
 mtbseq_project_name:
         MonoINH
-
-
-resultsDir_mtbseq_cohort: 
-        ./results/mtbseq/cohort

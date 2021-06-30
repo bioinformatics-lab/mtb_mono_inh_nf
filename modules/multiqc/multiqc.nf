@@ -1,40 +1,32 @@
 nextflow.enable.dsl = 2
 
-params.resultsDir = "${params.outdir}/fastqc"
-params.saveMode = 'copy'
-params.shouldPublish = true
+params.fastqc_resultsDir = "${params.outdir}/fastqc"
+params.results_dir = "${params.outdir}/multiqc"
+params.save_mode = 'copy'
+params.should_publish = true
 
 
 process MULTIQC {
-    publishDir params.resultsDir, mode: params.saveMode, enabled: params.shouldPublish
+    publishDir params.results_dir, mode: params.save_mode, enabled: params.should_publish
 
     input:
-    path("""${params.fastqcResultsDir}""") from ch_in_multiqc
+    path("*")
 
     output:
     tuple path("""multiqc_data"""),
-            path("""multiqc_report.html""") into ch_out_multiqc
+            path("""multiqc_report.html""")
 
 
     script:
 
     """
-    multiqc ${params.fastqcResultsDir}
+    multiqc .
     """
 
     stub:
-
     """
-    echo "multiqc ${params.fastqcResultsDir}"
-
     mkdir multiqc_data
+
     touch multiqc_report.html
     """
-
 }
-
-
-
-
-
-

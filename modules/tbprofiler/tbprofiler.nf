@@ -1,12 +1,13 @@
 nextflow.enable.dsl = 2
 
-params.resultsDir_tbprofiler_per_sample = "${params.outdir}/tbprofiler/samples"
-params.saveMode_tbprofiler_per_sample = 'copy'
-params.shouldPublish_tbprofiler_per_sample = true
+params.results_dir_tbprofiler_per_sample = "${params.outdir}/tbprofiler/samples"
+params.save_mode_tbprofiler_per_sample = 'copy'
+params.should_publish_tbprofiler_per_sample = true
 
 
 process TBPROFILER_PROFILE {
-    publishDir params.resultsDir_tbprofiler_per_sample, mode: params.saveMode_tbprofiler_per_sample, enabled: params.shouldPublish_tbprofiler_per_sample
+    tag "${genomeName}"
+    publishDir params.results_dir_tbprofiler_per_sample, mode: params.save_mode_tbprofiler_per_sample, enabled: params.should_publish_tbprofiler_per_sample
 
     input:
     tuple val(genomeName), path(genomeReads)
@@ -32,13 +33,13 @@ process TBPROFILER_PROFILE {
 }
 
 
-params.resultsDir_tbprofiler_cohort = "${params.outdir}/tbprofiler/cohort"
-params.saveMode_tbprofiler_cohort = 'copy'
-params.shouldPublish_tbprofiler_cohort = true
+params.results_dir_tbprofiler_cohort = "${params.outdir}/tbprofiler/cohort"
+params.save_mode_tbprofiler_cohort = 'copy'
+params.should_publish_tbprofiler_cohort = true
 
 
 process TBPROFILER_COLLATE {
-    publishDir params.resultsDir_tbprofiler_cohort, mode: params.saveMode_tbprofiler_cohort, enabled: params.shouldPublish_tbprofiler_cohort
+    publishDir params.results_dir_tbprofiler_cohort, mode: params.save_mode_tbprofiler_cohort, enabled: params.should_publish_tbprofiler_cohort
 
     input:
     path("results/*")
