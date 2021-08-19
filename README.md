@@ -21,7 +21,7 @@ A pipeline for analysing _Mycobacterium tuberculosis_ samples.
 2. Run it!
 
 ```
-	nextflow run https://github.com/bioinformatics-lab/mtb_mono_inh_nf/.git -params-file YOUR_PARAMS_FILE
+	nextflow run https://github.com/bioinformatics-lab/mtb_mono_inh_nf -params-file YOUR_PARAMS_FILE
 
 ```
 
